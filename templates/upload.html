@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Post - FOMO</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <link href="/static/styles/fomo.css" rel="stylesheet">
+    <link href="/static/styles/upload.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/fomo.jpeg" alt="FOMO"> <!-- Update with your logo path -->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">FOMO<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('upload_file') }}">Upload</a>
+                </div>
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_users') }}" method="post">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search users" name="username">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            {{ current_user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{{ url_for('my_profile') }}">Profile</a>
+                            <a class="dropdown-item" href="#">Account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-3">Upload New Post</h2>
+        <div class="card">
+            <div class="card-body">
+
+                <!-- Tab Navigation -->
+                <ul class="nav nav-tabs" id="uploadTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="image-tab" data-toggle="tab" href="#image" role="tab"
+                            aria-controls="image" aria-selected="true">Image</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="video-tab" data-toggle="tab" href="#video" role="tab"
+                            aria-controls="video" aria-selected="false">Video</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tweet-tab" data-toggle="tab" href="#tweet" role="tab"
+                            aria-controls="tweet" aria-selected="false">Tweet</a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="uploadTabContent">
+                    <!-- Image Tab Pane -->
+                    <div class="tab-pane fade show active" id="image" role="tabpanel" aria-labelledby="image-tab">
+                        <input type="file" name="file" id="file" class="form-control mb-3" required>
+                        <small class="form-text text-muted mb-3">Upload an image file</small>
+
+                        <div id="croppie-container" style="display:none;">
+                            <div id="croppie" class="mb-3"></div>
+                            <button id="crop-image" class="btn btn-primary mb-3">Crop Image</button>
+                        </div>
+
+                        <div id="image-preview-container" style="display:none;">
+                            <label for="image-preview">Cropped Image Preview</label>
+                            <img id="image-preview" src="#" alt="Cropped Preview" class="img-fluid mb-3" />
+                        </div>
+
+                        <!-- Hidden Form for Cropped Image Submission -->
+                        <form id="upload-form" action="{{ url_for('upload_file') }}" method="post"
+                            enctype="multipart/form-data" style="display:none;">
+                            <input type="hidden" name="image-cropped" id="image-cropped">
+                            <textarea name="caption" id="caption" class="form-control"
+                                placeholder="Say something about this post..."></textarea>
+                            <button type="submit" class="btn btn-success mt-3">Upload</button>
+                        </form>
+                    </div>
+
+                    <!-- Video Tab Pane -->
+                    <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
+                        <input type="file" name="video" id="video-upload" class="form-control mb-3">
+                        <small class="form-text text-muted mb-3">Upload a video file</small>
+                    </div>
+
+                    <!-- Tweet Tab Pane -->
+                    <div class="tab-pane fade" id="tweet" role="tabpanel" aria-labelledby="tweet-tab">
+                        <div class="form-group">
+                            <label for="tweet-text">Tweet Text</label>
+                            <textarea name="tweet-text" id="tweet-text" class="form-control mb-3"
+                                placeholder="Enter tweet text..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var croppie = null;
+            var fileInput = document.getElementById('file');
+            var croppieContainer = document.getElementById('croppie-container');
+            var uploadForm = document.getElementById('upload-form');
+            var imageCropped = document.getElementById('image-cropped');
+
+            fileInput.addEventListener('change', function (event) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    croppieContainer.style.display = 'block';
+                    croppie = new Croppie(document.getElementById('croppie'), {
+                        url: e.target.result,
+                        viewport: { width: 200, height: 200, type: 'square' },
+                        boundary: { width: 300, height: 300 },
+                        showZoomer: true,
+                        enableResize: true,
+                        enableOrientation: true
+                    });
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            document.getElementById('crop-image').addEventListener('click', function () {
+                croppie.result({
+                    type: 'canvas',
+                    size: 'original',
+                    format: 'jpeg' || 'png' || 'webp' || 'bmp' || 'ico' || 'gif',
+
+                    quality: 1
+                }).then(function (img) {
+                    // Create an image to check dimensions
+                    var image = new Image();
+                    image.src = img;
+
+                    image.onload = function () {
+                        // Calculate aspect ratio
+                        var aspectRatio = this.width / this.height;
+
+                        // Define aspect ratio thresholds
+                        var landscapeRatio = 1.91; // 1080x566
+                        var portraitRatio = 0.80;  // 1080x1350
+
+                        // Check if the image dimensions exceed the maximum allowed dimensions for landscape
+                        if (aspectRatio.toFixed(2) >= landscapeRatio.toFixed(2) && (this.width > 1080 || this.height > 566)) {
+                            alert('Landscape image exceeds the maximum dimensions of 1080x566.');
+                            return; // Stop further execution
+                        }
+
+                        // Check if the image dimensions exceed the maximum allowed dimensions for portrait
+                        if (aspectRatio.toFixed(2) <= portraitRatio.toFixed(2) && (this.width > 1080 || this.height > 1350)) {
+                            alert('Portrait image exceeds the maximum dimensions of 1080x1350.');
+                            return; // Stop further execution
+                        }
+
+                        // If dimensions are correct, proceed
+                        var preview = document.getElementById('image-preview');
+                        preview.src = img;
+
+                        // Display the preview container
+                        document.getElementById('image-preview-container').style.display = 'block';
+                        imageCropped.value = img;
+                        croppieContainer.style.display = 'none';
+                        uploadForm.style.display = 'block';
+                    };
+                });
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

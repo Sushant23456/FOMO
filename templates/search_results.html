@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - FOMO</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="/static/styles/fomo.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/fomo.jpeg" alt="FOMO"> <!-- Update with your logo path -->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">FOMO<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                  <a class="nav-link" href="{{ url_for('upload_file') }}">Upload</a>
+              </div>
+              <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_users') }}" method="post">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search users" name="username">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+                <ul class="navbar-nav">
+                  <!-- Display current user's username if logged in -->
+                  {% if current_user.is_authenticated %}
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ current_user.username }}
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{{ url_for('my_profile') }}">Profile</a>
+                            <a class="dropdown-item" href="#">Account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                          </div>
+                      </li>
+                  {% else %}
+                      <li class="nav-item">
+                          <a class="nav-link" href="/login">Login</a>
+                      </li>
+                  {% endif %}
+              </ul>
+    
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Search Results</h2>
+        {% if users %}
+            {% for user in users %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.username }}</h5>
+                        <p class="card-text">Email: {{ user.email }}</p>
+                        <!-- Additional user information can go here -->
+                        {% if user.id in sent_requests_ids %}
+                            <button class="btn btn-secondary disabled">Friend Request Sent</button>
+                        {% else %}
+                            <a href="{{ url_for('send_friend_request', friend_id=user.id) }}" class="btn btn-primary">Add as Friend</a>
+                        {% endif %}
+                        <a href="{{ url_for('user_profile', username=user.username) }}">Visit Profile</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No users found. Try a different search term.</p>
+        {% endif %}
+    </div>
+    
+    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

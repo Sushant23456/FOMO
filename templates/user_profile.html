@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOMO - Your Social Hub</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="/static/styles/fomo.css" rel="stylesheet">
+    <link href="/static/styles/profile.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/fomo.jpeg" alt="FOMO"> <!-- Update with your logo path -->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">FOMO<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('upload_file') }}">Upload</a>
+                </div>
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_users') }}" method="post">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search users" name="username">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+
+                <ul class="navbar-nav">
+                    <!-- Notification Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notifications
+                        </a>
+                        <div class="dropdown-menu custom-dropdown-menu" aria-labelledby="notificationDropdown">
+                            <!-- Friend Requests -->
+                            <h6 class="dropdown-header">Friend Requests</h6>
+                            {% if friend_requests|length > 0 %}
+                            {% for request in friend_requests %}
+                            <div class="dropdown-item d-flex justify-content-between align-items-center">
+                                <!-- Circular Profile Picture -->
+                                {% if request.sender %}
+                                {% if request.sender.profile_picture %}
+                                <img src="{{ url_for('static', filename='profile_pics/' + request.sender.profile_picture) }}"
+                                    alt="Profile Picture" class="rounded-circle">
+                                {% else %}
+                                <!-- Handle the case where sender.profile_picture is None (e.g., no profile picture) -->
+                                <img src="{{ url_for('static', filename='default_profile.jpg') }}"
+                                    alt="Default Profile Picture" class="rounded-circle">
+                                {% endif %}
+                                {% else %}
+                                <!-- Handle the case where sender is None (e.g., no sender) -->
+                                <img src="{{ url_for('static', filename='default_profile.jpg') }}"
+                                    alt="Default Profile Picture" class="rounded-circle">
+                                {% endif %}
+
+                                <span>From: {{ request.sender.username }}</span>
+                                <div>
+                                    {% if request.status == 'pending' %}
+                                    <a href="{{ url_for('accept_friend_request', request_id=request.id) }}"
+                                        class="btn btn-sm btn-success">Accept</a>
+                                    <a href="{{ url_for('decline_friend_request', request_id=request.id) }}"
+                                        class="btn btn-sm btn-danger">Decline</a>
+                                    {% elif request.status == 'accepted' %}
+                                    <span class="badge badge-success">Accepted</span>
+                                    {% elif request.status == 'declined' %}
+                                    <span class="badge badge-danger">Declined</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <a class="dropdown-item" href="#">No friend requests.</a>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+
+                            <!-- Sent Friend Requests -->
+                            <h6 class="dropdown-header">Sent Requests</h6>
+                            {% if sent_friend_requests|length > 0 %}
+                            {% for sent_request in sent_friend_requests %}
+                            <div class="dropdown-item">
+                                <!-- Circular Profile Picture -->
+                                {% if sent_request.sender %}
+                                {% if sent_request.sender.profile_picture %}
+                                <img src="{{ url_for('static', filename='profile_pics/' + sent_request.sender.profile_picture) }}"
+                                    alt="Profile Picture" class="rounded-circle">
+                                {% else %}
+                                <!-- Handle the case where sender.profile_picture is None (e.g., no profile picture) -->
+                                <img src="{{ url_for('static', filename='default_profile.jpg') }}"
+                                    alt="Default Profile Picture" class="rounded-circle">
+                                {% endif %}
+                                {% else %}
+                                <!-- Handle the case where sender is None (e.g., no sender) -->
+                                <img src="{{ url_for('static', filename='default_profile.jpg') }}"
+                                    alt="Default Profile Picture" class="rounded-circle">
+                                {% endif %}
+
+                                <p>To: {{ sent_request.receiver.username }}
+                                    {% if sent_request.status == 'pending' %}
+                                    <span class="badge badge-warning">Pending</span>
+                                    {% elif sent_request.status == 'accepted' %}
+                                    <span class="badge badge-success">Accepted</span>
+                                    {% elif sent_request.status == 'declined' %}
+                                    <span class="badge badge-danger">Declined</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <a class="dropdown-item" href="#">You haven't sent any friend requests.</a>
+                            {% endif %}
+
+                            <a class="dropdown-item text-center" href="#">View All</a>
+                        </div>
+                    </li>
+
+
+                    <!-- User Account Dropdown -->
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            {{ current_user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{{ url_for('my_profile') }}">Profile</a>
+                            <a class="dropdown-item" href="#">Account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+    <main>
+        <div class="profile-container">
+            <!-- Display user's profile picture -->
+            <div class="profile-pic">
+                {% if user.profile_picture %}
+                <img src="{{ url_for('static', filename='profile_pics/' + user.profile_picture) }}"
+                    alt="Profile Picture">
+                {% else %}
+                <img src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Default Profile Picture">
+                {% endif %}
+            </div>
+            <h2>{{ user.name }}</h2> <!-- Display the user's name -->
+            <p><strong>Fomo's:</strong> {{ user.friends_count }}</p> <!-- Display the user's friends count -->
+
+            <hr>
+            <!-- Display user's Bio -->
+            {% if user.bio %}
+            <div class="user-bio">
+                <h3>Bio</h3>
+                <p>{{ user.bio }}</p>
+            </div>
+            {% endif %}
+            <hr>
+            <!-- Display user's Description -->
+            {% if user.description %}
+            <div class="user-description">
+                <h3>Description</h3>
+                <p>{{ user.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <h3>{{ user.username }}'s Posts</h3>
+        <!-- Display user's posts -->
+        {% if user_posts %}
+        <div class="row">
+            {% for post in user_posts %}
+            <div class="col-md-4 mb-4">
+                <div class="content-item">
+                    <img src="{{ url_for('uploaded_file', filename=post.media_path) }}" alt="Content Image"
+                        class="img-fluid">
+                    <p>{{ post.caption }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>{{ user.username }} has not posted anything yet.</p>
+        {% endif %}
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

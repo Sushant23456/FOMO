@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Friends</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .friends-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .friend-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .friend-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .friend-pic {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .friend-info h5 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>{{ user.name }}'s Friends</h1>
+
+        <!-- Check if the user has friends -->
+        {% if friends|length > 0 %}
+            <div class="friends-list">
+                {% for friend in friends %}
+                    <div class="friend-item">
+                        <!-- Display each friend's information -->
+                        <div class="friend-profile">
+                            {% if friend.profile_picture %}
+                                <img src="{{ url_for('static', filename='profile_pics/' + friend.profile_picture) }}" alt="{{ friend.username }}" class="rounded-circle friend-pic">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="{{ friend.username }}" class="rounded-circle friend-pic">
+                            {% endif %}
+                            <div class="friend-info">
+                                <h5><a href="{{ url_for('user_profile', username=friend.username) }}">{{ friend.username }}</a></h5>
+                                <p>{{ friend.bio }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No friends found.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

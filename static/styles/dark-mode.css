@@ -1,0 +1,155 @@
+:root {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --nav-color: #333333;
+    --nav-text-color: #ffffff;
+    --card-background-color: #1e1e1e;
+    --border-color: #424242;
+    --button-color: #282828;
+    --button-text-color: #ffffff;
+    --alert-color: #333333;
+    --input-background-color: #282828;
+    --input-text-color: #ffffff;
+}
+
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+
+.navbar-dark.bg-custom {
+    background-color: var(--nav-color);
+}
+
+
+.nav-link,
+.navbar-brand,
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--nav-text-color);
+}
+
+
+.vertical-nav {
+    background-color: var(--nav-color);
+    color: var(--text-color);
+}
+
+
+.alert {
+    background-color: var(--alert-color);
+    color: var(--text-color);
+}
+
+.content-item,
+.custom-dropdown,
+.profile-section-new,
+.profile-header,
+.posts-container,
+.modal-content {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.btn-primary,
+.btn-outline-primary {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    color: var(--button-text-color);
+}
+
+.btn-primary:hover,
+.btn-outline-primary:hover {
+    background-color: var(--button-color);
+    opacity: 0.8;
+}
+
+.form-control,
+.custom-file-input {
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    border: 1px solid var(--border-color);
+}
+
+.form-control:focus,
+.custom-file-input:focus {
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    border-color: var(--text-color);
+    box-shadow: none;
+}
+
+.input-group-text {
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    border-color: var(--border-color);
+}
+
+.profile-thumbnail {
+    border: 2px solid var(--border-color);
+}
+
+.navbar-toggler {
+    border-color: var(--text-color);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml, ...");
+}
+
+.dropdown-menu {
+    background-color: var(--card-background-color);
+    border-color: var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    color: var(--button-text-color);
+}
+
+.modal-content {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+    border-color: var(--border-color);
+}
+
+.vertical-nav .nav-item .nav-link {
+    color: var(--nav-text-color);
+    background-color: transparent;
+    padding: 10px 15px;
+}
+
+.vertical-nav .nav-item .nav-link:hover {
+    color: var(--text-color);
+    background-color: var(--button-color);
+}
+
+.vertical-nav .nav-link i {
+    color: var(--text-color);
+    margin-right: 8px;
+}
+
+.vertical-nav .nav-item.active .nav-link,
+.vertical-nav .nav-item .nav-link.active {
+    color: var(--button-text-color);
+    background-color: var(--button-color);
+}

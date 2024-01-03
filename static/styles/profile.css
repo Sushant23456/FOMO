@@ -1,0 +1,119 @@
+.content-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.content-item:hover {
+    transform: translateY(-5px);
+}
+
+.content-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+}
+
+.content-item p {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+h3 {
+    text-align: center;
+}
+
+.rounded-text {
+    font-family: 'Varela Round', sans-serif, Arial, Helvetica;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+
+.btn{
+    background-color: #049c94;
+    color: white;
+    border: none;  
+    margin-left: -580px;
+    border-radius: 25px;
+    border: 2px solid #ddd;
+    box-shadow: none;
+    margin-top: -20px;
+}
+
+.btn-save{
+    background-color: #049c94;
+    color: white;
+    border: none;  
+    border-radius: 25px;
+    height: 40px;
+    width: 80%;
+    margin-left: 40px;
+}
+
+.modal-header{
+    background-color: #049c94;
+    border: none;
+}
+
+.modal-title{
+    color: white;
+}
+
+#main-content p {
+    font-size: 18px;
+    color: black;
+    text-align: center;
+}
+
+.profile-section-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+    margin-bottom: 45px;
+}
+
+.user-info {
+    margin-left: 20px;
+}
+
+.user-info h3,
+.user-info p,
+.user-info a {
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.posts-section h2 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+.posts-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-left: 260px;
+    max-width: 70%;
+    height: 40%;
+}
+
+.posts-section img{
+    width: 100%;
+    height: 100%;
+    border-radius: 8px 8px 0 0;
+}
