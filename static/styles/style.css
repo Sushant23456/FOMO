@@ -4,23 +4,29 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #006d77; /* Teal background to match the FOMO theme */
+    background-color: #006d77; 
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 h2 {
-    color: #ffffff; /* White color for headings */
+    color: #ffffff; 
+}
+
+.register-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: black;
 }
 
 p {
-    color: #eeeeee; /* Light grey color for text */
+    color: #004c4c;
 }
 
 .header {
     width: 100%;
-    background-color: #004c4c; /* Darker shade for the header to stand out */
+    background-color: #004c4c; 
     padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     position: fixed;
     top: 0;
     left: 0;

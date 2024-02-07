@@ -65,7 +65,9 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user, remember=request.form.get('remember') == 'on')
+            print(user)
             return redirect(url_for('home'))
+        
         else:
             flash('Invalid username or password')
     return render_template('login.html')
@@ -279,6 +281,7 @@ def my_profile():
     friends_count = Friendship.query.filter_by(user_id=current_user.id).count()
     friend_requests = FriendshipRequest.query.filter_by(receiver_id=current_user.id).all()
 
+    print('posts', posts)
     return render_template('profile.html', posts=posts, friends_count=friends_count, friend_requests=friend_requests, sent_friend_requests=sent_friend_requests)
 
 @app.route('/profile/<username>')
@@ -345,7 +348,7 @@ def accept_friend_request(request_id):
     else:
         flash('Friend request not found', 'error')
 
-    return redirect(url_for('profile'))
+    return redirect(url_for('my_profile'))
 
 
 @app.route('/decline_friend_request/<int:request_id>')
